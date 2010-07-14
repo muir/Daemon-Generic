@@ -453,15 +453,13 @@ L<Proc::Application::Daemon>,
 L<Proc::Daemon>,
 L<Proc::Forking>.
 
-=head1 THANK THE AUTHOR
-
-If you need high-speed internet services (T1, T3, OC3 etc), please 
-send me your request-for-quote.  I have access to very good pricing:
-you'll save money and get a great service.
-
 =head1 LICENSE
 
 Copyright(C) 2006 David Muir Sharnoff <perl@dave.sharnoff.org>,
 This module may be used and distributed on the same terms
 as Perl itself.
+
+=head1 PACKAGERS
+
+Daemon::Generic is packaged for Fedora by Emmanuel Seyman <emmanuel.seyman@club-internet.fr>.
 

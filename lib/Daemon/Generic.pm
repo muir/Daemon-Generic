@@ -13,7 +13,7 @@ use File::Flock;
 our @ISA = qw(Exporter);
 our @EXPORT = qw(newdaemon);
 
-our $VERSION = 0.51;
+our $VERSION = 0.61;
 
 our $force_quit_delay = 15;
 our $package = __PACKAGE__;
@@ -98,6 +98,10 @@ sub new
 	if (-e $pidfile) {
 		if ($locked = lock($pidfile, undef, 'nonblocking')) {
 			# old process is dead
+			if ($do eq 'status') {
+			    print "$0 dead\n";
+			    exit 1;
+			}
 		} else {
 			sleep(2) if -M $pidfile < 2/86400;
 			my $oldpid = read_file($pidfile);
@@ -105,14 +109,26 @@ sub new
 			if ($oldpid) {
 				if ($do eq 'stop' or $do eq 'restart') {
 					$killed = $self->gd_kill($oldpid);
-					exit if $do eq 'stop';
 					$locked = lock($pidfile);
+					if ($do eq 'stop') {
+						unlink($pidfile);
+						exit;
+					}
 				} elsif ($do eq 'reload') {
 					if (kill(1,$oldpid)) {
 						print "Requested reconfiguration\n";
 						exit;
 					} else {
 						print "Kill failed: $!\n";
+					}
+				} elsif ($do eq 'status') {
+					if (kill(0,$oldpid)) {
+						print "$0 running - pid $oldpid\n";
+						$self->gd_check($pidfile, $oldpid);
+						exit 0;
+					} else {
+						print "$0 dead\n";
+						exit 1;
 					}
 				} elsif ($do eq 'check') {
 					if (kill(0,$oldpid)) {
@@ -122,7 +138,7 @@ sub new
 					} 
 				} elsif ($do eq 'start') {
 					print "\u$self->{gd_progname} is already running (pid $oldpid)\n";
-					exit(3);
+					exit; # according to LSB, this is no error
 				}
 			} else {
 				$self->gd_error("Pid file $pidfile is invalid but locked, exiting\n");
@@ -137,7 +153,16 @@ sub new
 		print "No $0 running\n";
 	}
 
-	exit if $do eq 'stop';
+	if ($do eq 'stop') {
+		unlink($pidfile);
+		exit;
+	}
+
+	if ($do eq 'status') {
+		print "Unused\n";
+		exit 3;
+	}
+
 	if ($do eq 'check') {
 		$self->gd_check($pidfile);
 		exit 
