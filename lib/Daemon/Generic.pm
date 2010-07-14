@@ -13,7 +13,7 @@ use File::Flock;
 our @ISA = qw(Exporter);
 our @EXPORT = qw(newdaemon);
 
-our $VERSION = 0.61;
+our $VERSION = 0.71;
 
 our $force_quit_delay = 15;
 our $package = __PACKAGE__;
@@ -264,6 +264,7 @@ sub gd_redirect_output
 	open(STDERR, "|logger $p -t '$logname'") or (print "could not open stderr: $!" && exit(1));
 	close(STDOUT);
 	open(STDOUT, ">&STDERR") or die "redirect STDOUT -> STDERR: $!";
+	close(STDIN);
 }
 
 sub gd_daemonize

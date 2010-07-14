@@ -1,3 +1,7 @@
+= 2010/07/14	0.71
+
+Fix bug 58287 - close STDIN when daemonizing to complete the
+detach.
 
 = 2009/04/04	0.61
 
