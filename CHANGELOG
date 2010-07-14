@@ -1,0 +1,12 @@
+
+scips noted an error in the example program.
+
+= 2007/08/15	0.51
+
+Add File::Slurp dependency to Makefile.PL.   Reported
+by Tom Lea <tom dot lea at zeninternet dot co dot uk>.
+
+= 2007/03/27	0.4
+
+Ronald J Kimball <rjk at tamias dot net> sent in
+a patch to avoid accidently clobbering $0.

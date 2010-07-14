@@ -1,0 +1,9 @@
+README
+lib/Daemon/Generic.pm
+lib/Daemon/Generic.pod
+lib/Daemon/Generic/Event.pm
+lib/Daemon/Generic/While1.pm
+Makefile.PL
+MANIFEST
+CHANGELOG
+META.yml                                 Module meta-data (added by MakeMaker)

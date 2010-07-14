@@ -1,0 +1,30 @@
+
+require 5.008;
+use ExtUtils::MakeMaker;
+WriteMakefile(
+	NAME		=> 'Daemon::Generic',
+	DISTNAME	=> 'Daemon-Generic',
+	VERSION_FROM	=> 'lib/Daemon/Generic.pm',
+	dist		=> { COMPRESS => 'gzip', SUFFIX => 'gz' },
+	PREREQ_PM	=> {
+		'Getopt::Long'		=> 0,
+		'File::Flock'		=> 0,
+		'File::Slurp'		=> 0,
+		'Text::Wrap'		=> 0,
+		'Cwd'			=> 0,
+		'File::Basename'	=> 0,
+	},
+);
+
+package MY;
+
+sub postamble {
+    <<'END_OF_POSTAMBLE';
+
+pm_to_blib: README
+
+README: lib/Daemon/Generic.pod
+	pod2text  lib/Daemon/Generic.pod >README
+
+END_OF_POSTAMBLE
+}
