@@ -1,3 +1,8 @@
+= 2011/05/19	0.72
+
+Address https://rt.cpan.org/Public/Bug/Display.html?id=63704,
+call setsid between forks rather than after them.
+
 = 2010/07/14	0.71
 
 Fix bug 58287 - close STDIN when daemonizing to complete the

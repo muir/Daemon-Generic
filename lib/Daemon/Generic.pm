@@ -1,5 +1,4 @@
 
-# Copyright (C) 2006, David Muir Sharnoff <perl@dave.sharnoff.org>
 
 package Daemon::Generic;
 
@@ -13,7 +12,7 @@ use File::Flock;
 our @ISA = qw(Exporter);
 our @EXPORT = qw(newdaemon);
 
-our $VERSION = 0.71;
+our $VERSION = 0.72;
 
 our $force_quit_delay = 15;
 our $package = __PACKAGE__;
@@ -275,10 +274,12 @@ sub gd_daemonize
 	my $pid;
 	POSIX::_exit(0) if $pid = fork;
 	die "Could not fork: $!" unless defined $pid;
+
+	POSIX::setsid();
+
 	POSIX::_exit(0) if $pid = fork;
 	die "Could not fork: $!" unless defined $pid;
 
-	POSIX::setsid();
 	select(STDERR);
 	$| = 1;
 	print "Sucessfully daemonized\n";

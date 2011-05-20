@@ -14,6 +14,19 @@ WriteMakefile(
 		'Cwd'			=> 0,
 		'File::Basename'	=> 0,
 	},
+	($] >= 5.005 
+		?	
+			(
+				ABSTRACT	=> 'framework to provide start/stop/reload for a daemon',
+				AUTHOR		=> 'David Muir Sharnoff <cpan@dave.sharnoff.org>',
+				META_MERGE     => {
+					resources  => {
+						repository => 'http://github.com/muir/Daemon-Generic',
+					},
+				},
+			) 
+		: ()
+	),
 );
 
 package MY;
