@@ -400,6 +400,7 @@ sub gd_usage
 	while (@all) {
 		my ($key, $desc) = splice(@all, 0, 2);
 		local($Text::Wrap::columns) = 79;
+		local($Text::Wrap::unexpand) = 0;
 		$details .= wrap(
 			sprintf(" %-${col}s ", $key),
 			" " x ($col + 2),
