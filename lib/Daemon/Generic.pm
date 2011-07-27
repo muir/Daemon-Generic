@@ -1,5 +1,4 @@
 
-
 package Daemon::Generic;
 
 use strict;
@@ -12,7 +11,7 @@ use File::Flock;
 our @ISA = qw(Exporter);
 our @EXPORT = qw(newdaemon);
 
-our $VERSION = 0.72;
+our $VERSION = 0.81;
 
 our $force_quit_delay = 15;
 our $package = __PACKAGE__;
@@ -52,6 +51,7 @@ sub new
 	$av0 =~ s!/!/.!g;
 
 	my $self = {
+		gd_av0		=> $av0,
 		gd_args		=> \%args,
 		gd_pidfile	=> $args{pidfile},
 		gd_logpriority	=> $args{logpriority},
@@ -88,6 +88,8 @@ sub new
 	my %newconfig = $self->gd_preconfig;
 
 	$self->{gd_pidfile} = $newconfig{pidfile} if $newconfig{pidfile};
+
+	print "PIDFILE=$self->{gd_pidfile}\n" if $self->{debug};
 
 	print "Configuration looks okay\n" if $do eq 'check';
 
@@ -135,7 +137,7 @@ sub new
 						$self->gd_check($pidfile, $oldpid);
 						exit;
 					} 
-				} elsif ($do eq 'start') {
+				} elsif ($do eq 'start' || $do eq 'debug') {
 					print "\u$self->{gd_progname} is already running (pid $oldpid)\n";
 					exit; # according to LSB, this is no error
 				}
@@ -167,11 +169,11 @@ sub new
 		exit 
 	}
 
-	unless ($do eq 'reload' || $do eq 'restart' || $do eq 'start') {
+	unless ($do eq 'reload' || $do eq 'restart' || $do eq 'start' || $do eq 'debug') {
 		$self->gd_other_cmd($do, $locked);
 	}
 
-	unless ($self->{gd_foreground}) {
+	unless ($self->{gd_foreground} || $do eq 'debug') {
 		$self->gd_daemonize;
 	}
 
@@ -258,31 +260,46 @@ sub gd_redirect_output
 {
 	my $self = shift;
 	return if $self->{gd_foreground};
-	my $logname = $self->gd_logname;
-	my $p = $self->{gd_logpriority} ? "-p $self->{gd_logpriority}" : "";
-	open(STDERR, "|logger $p -t '$logname'") or (print "could not open stderr: $!" && exit(1));
-	close(STDOUT);
-	open(STDOUT, ">&STDERR") or die "redirect STDOUT -> STDERR: $!";
-	close(STDIN);
+	open(STDOUT, ">/dev/null") or die("open >/dev/null: $!");
+	open(STDIN, "</dev/null") or die("open </dev/null: $!");
+	open(STDERR, ">&STDOUT") or tmpdie("dup stdout > stderr: $!");
 }
 
 sub gd_daemonize
 {
 	my $self = shift;
+	my $logname = $self->gd_logname;
+
+	open(TMPERR, ">&STDERR") or die "dup STDERR > TMPERR: $!";
+
 	print "Starting $self->{gd_progname} server\n";
 	$self->gd_redirect_output();
 	my $pid;
 	POSIX::_exit(0) if $pid = fork;
-	die "Could not fork: $!" unless defined $pid;
+	tmpdie("Could not fork: $!") 
+		unless defined $pid;
 
 	POSIX::setsid();
 
-	POSIX::_exit(0) if $pid = fork;
-	die "Could not fork: $!" unless defined $pid;
-
+	my $p = $self->{gd_logpriority} ? "-p $self->{gd_logpriority}" : "";
+	open(STDERR, "|logger $p -t '$logname'") or tmpdie("open |logger $p -t $logname: $!");
+	open(STDOUT, ">&STDERR") or tmpdie("dup stderr > stdout: $!");
 	select(STDERR);
 	$| = 1;
-	print "Sucessfully daemonized\n";
+	select(STDOUT);
+	$| = 1;
+	print "Sucessfully daemonized\n" 
+		or tmpdir("write to |logger: $!");
+
+	close(TMPERR);
+}
+
+sub tmpdie
+{
+	my $msg = "@_";
+	$msg .= sprintf(" at %s line %d\n", (caller())[1,2]) unless $msg =~ /\n$/;
+	print TMPERR $msg;
+	exit 1;
 }
 
 sub gd_logname
@@ -358,6 +375,7 @@ sub gd_commands
 		check		=> "Check the configuration file and report the daemon state",
 		help		=> "Display this usage info",
 		version		=> "Display the version of $self->{gd_progname}",
+		debug		=> "Starts a new $self->{gd_progname} in the foreground",
 	)
 }
 

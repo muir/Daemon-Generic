@@ -1,4 +1,3 @@
-# Copyright (C) 2006, David Muir Sharnoff <muir@idiom.com>
 
 package Daemon::Generic::While1;
 
@@ -175,15 +174,10 @@ The time at which an (unprocessed) SIGHUP was recevied.
 
 =back
 
-=head1 THANK THE AUTHOR
-
-If you need high-speed internet services (T1, T3, OC3 etc), please 
-send me your request-for-quote.  I have access to very good pricing:
-you'll save money and get a great service.
-
 =head1 LICENSE
 
-Copyright(C) 2006 David Muir Sharnoff <muir@idiom.com>. 
+Copyright (C) 2006-2010 David Muir Sharnoff <muir@idiom.com>. 
+Copyright (C) 2011 Google, Inc.
 This module may be used and distributed on the same terms
 as Perl itself.
 

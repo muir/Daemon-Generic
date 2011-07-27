@@ -14,6 +14,12 @@ WriteMakefile(
 		'Cwd'			=> 0,
 		'File::Basename'	=> 0,
 	},
+	BUILD_REQUIRES	=> {
+		'Time::HiRes'		=> 0,
+		'Event'			=> 0,
+		'AnyEvent'		=> 0,
+		'Eval::LineNumbers'	=> 0,
+	},
 	($] >= 5.005 
 		?	
 			(

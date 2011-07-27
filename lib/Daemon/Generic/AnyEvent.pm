@@ -1,10 +1,10 @@
 
-package Daemon::Generic::Event;
+package Daemon::Generic::AnyEvent;
 
 use strict;
 use warnings;
 require Daemon::Generic;
-require Event;
+require AnyEvent;
 require Exporter;
 
 our @ISA = qw(Daemon::Generic Exporter);
@@ -21,10 +21,9 @@ sub newdaemon
 sub gd_setup_signals
 {
 	my $self = shift;
-	my $reload_event = Event->signal(
+
+	$self->{gd_reload_event} = AnyEvent->signal(
 		signal	=> 'HUP',
-		desc	=> 'reload on SIGHUP',
-		prio	=> 6,
 		cb	=> sub { 
 			$self->gd_reconfig_event; 
 			$self->{gd_timer}->cancel()
@@ -32,7 +31,7 @@ sub gd_setup_signals
 			$self->gd_setup_timer();
 		},
 	);
-	my $quit_event = Event->signal(
+	$self->{gd_quit_event} = AnyEvent->signal(
 		signal	=> 'INT',
 		cb	=> sub { $self->gd_quit_event; },
 	);
@@ -43,10 +42,9 @@ sub gd_setup_timer
 	my $self = shift;
 	if ($self->can('gd_run_body')) {
 		my $interval = ($self->can('gd_interval') && $self->gd_interval()) || 1;
-		$self->{gd_timer} = Event->timer(
-			cb		=> [ $self, 'gd_run_body' ],
+		$self->{gd_timer} = AnyEvent->timer(
+			cb		=> sub { $self->gd_run_body() },
 			interval	=> $interval,
-			hard		=> 0,
 		);
 	}
 }
@@ -69,13 +67,14 @@ sub gd_quit_event
 
 =head1 NAME
 
- Daemon::Generic::Event - Generic daemon framework with Event.pm
+ Daemon::Generic::AnyEvent - Generic daemon framework with AnyEvent.pm
 
 =head1 SYNOPSIS
 
- use Daemon::Generic::Event;
+ use Daemon::Generic::AnyEvent;
+ use Some::Event::Loop::Supported::By::AnyEvent;
 
- @ISA = qw(Daemon::Generic::Event);
+ @ISA = qw(Daemon::Generic::AnyEvent);
 
  sub gd_preconfig {
 	# stuff
@@ -83,7 +82,7 @@ sub gd_quit_event
 
 =head1 DESCRIPTION
 
-Daemon::Generic::Event is a subclass of L<Daemon::Generic> that
+Daemon::Generic::AnyEvent is a subclass of L<Daemon::Generic> that
 predefines some methods:
 
 =over 15
