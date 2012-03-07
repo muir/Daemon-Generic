@@ -11,7 +11,7 @@ use File::Flock;
 our @ISA = qw(Exporter);
 our @EXPORT = qw(newdaemon);
 
-our $VERSION = 0.81;
+our $VERSION = 0.82;
 
 our $force_quit_delay = 15;
 our $package = __PACKAGE__;
@@ -289,7 +289,7 @@ sub gd_daemonize
 	select(STDOUT);
 	$| = 1;
 	print "Sucessfully daemonized\n" 
-		or tmpdir("write to |logger: $!");
+		or tmpdie("write to |logger: $!");
 
 	close(TMPERR);
 }
