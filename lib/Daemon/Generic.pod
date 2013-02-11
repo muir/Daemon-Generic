@@ -25,7 +25,7 @@ Genric::Daemon does can be overridden as needed.
 
 =head1 EXAMPLE USAGE OUTPUT
 
-Unless overriden, the usage output for your program will 
+Unless overridden, the usage output for your program will 
 look something like this:
 
  Usage: $progname [ -c file ] [ -f ] { start | stop | reload | restart | help | version | check }
@@ -68,7 +68,7 @@ file for this daemon.
 
 (/var/run/$progname) We include the configuration file name
 as part of the pid file in case there are multiple instances
-of this deamon.  The pidbase is is the part of the PID file
+of this daemon.  The pidbase is is the part of the PID file
 that does not include the configuration file name.
 
 =item pidfile
