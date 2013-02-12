@@ -85,6 +85,9 @@ MUST-OVERRIDE CALLBACK METHODS
 
     gd_run()       This is where you put your main program.
 
+                   It is okay to change userid/group as the first action of
+                   gd_run().
+
 MAY-OVERRIDE CALLBACK METHODS
     The package that subclasses Daemon::Generic does not have to override
     these methods but it may want to.

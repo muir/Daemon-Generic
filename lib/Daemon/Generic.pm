@@ -160,7 +160,7 @@ sub new
 	}
 
 	if ($do eq 'status') {
-		print "Unused\n";
+		print "No $0 running\n";
 		exit 3;
 	}
 
