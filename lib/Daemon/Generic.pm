@@ -571,7 +571,7 @@ sub gd_kill
 	return $killed;
 }
 
-sub gd_preconfig { die "gd_preconfig() must be redefined"; }
+sub gd_preconfig { }
 
 sub gd_postconfig { }
 

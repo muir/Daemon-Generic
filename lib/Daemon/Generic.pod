@@ -8,7 +8,6 @@
  use Daemon::Generic;
 
  sub gd_run { ... stuff }
- sub gd_preconfig { ... stuff }
 
  newdaemon();
 
@@ -121,18 +120,6 @@ callback methods.
 
 =over 15
 
-=item gd_preconfig()
-
-C<gd_preconfig()> is called to parse the configuration file 
-(C<$self-E<gt>{configfile}>).  Preconfig is called on all invocations
-of the daemon (C<daemon reload>, C<daemon check>, C<daemon stop>, etc).
-It shouldn't start anything but it can and should verify that
-the config file is fine.
-
-The return value should be a hash.  With one exception, the return
-value is only used by C<gd_postconfig()>.  The exception is that 
-C<gd_preconfig()> may return a revised PID file location (key C<pidfile>).
-
 =item gd_run()
 
 This is where you put your main program.
@@ -146,6 +133,20 @@ The package that subclasses Daemon::Generic does not have to override these
 methods but it may want to.
 
 =over 15
+
+=item gd_preconfig()
+
+C<gd_preconfig()> is called to parse the configuration file 
+(C<$self-E<gt>{configfile}>).  Preconfig is called on all invocations
+of the daemon (C<daemon reload>, C<daemon check>, C<daemon stop>, etc).
+It shouldn't start anything but it can and should verify that
+the config file is fine.
+
+The return value should be a hash.  With one exception, the return
+value is only used by C<gd_postconfig()>.  The exception is that 
+C<gd_preconfig()> may return a revised PID file location (key C<pidfile>).
+
+Most uses of Daemon::Generic should define C<gd_preconfig>.
 
 =item gd_postconfig(%config)
 

@@ -5,7 +5,6 @@ SYNOPSIS
      use Daemon::Generic;
 
      sub gd_run { ... stuff }
-     sub gd_preconfig { ... stuff }
 
      newdaemon();
 
@@ -84,6 +83,12 @@ MUST-OVERRIDE CALLBACK METHODS
     The package that subclasses Daemon::Generic must provide the following
     callback methods.
 
+    gd_run()       This is where you put your main program.
+
+MAY-OVERRIDE CALLBACK METHODS
+    The package that subclasses Daemon::Generic does not have to override
+    these methods but it may want to.
+
     gd_preconfig() "gd_preconfig()" is called to parse the configuration
                    file ("$self->{configfile}"). Preconfig is called on all
                    invocations of the daemon ("daemon reload", "daemon
@@ -96,11 +101,8 @@ MUST-OVERRIDE CALLBACK METHODS
                    exception is that "gd_preconfig()" may return a revised
                    PID file location (key "pidfile").
 
-    gd_run()       This is where you put your main program.
-
-MAY-OVERRIDE CALLBACK METHODS
-    The package that subclasses Daemon::Generic does not have to override
-    these methods but it may want to.
+                   Most uses of Daemon::Generic should define
+                   "gd_preconfig".
 
     gd_postconfig(%config)
                    Postconfig() is called only when the daeamon is actually
