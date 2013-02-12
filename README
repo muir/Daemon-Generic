@@ -225,6 +225,10 @@ MAY-OVERRIDE CALLBACK METHODS
                    Normal behavior: exit. Only referenced by
                    "gd_setup_signals()".
 
+    gd_kill_groups()
+                   Return true if gd_kill should kill process groups ($pid)
+                   instead of just the one daemon ($pid). Default is false.
+
     gd_kill($pid)  Used by the "stop" and "restart" commands to get rid of
                    the old daemon. Normal behavior: send a SIGINT. Check to
                    see if process $pid has died. If it has not, keep

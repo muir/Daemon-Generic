@@ -316,6 +316,11 @@ Only referenced by C<gd_setup_signals()>.
 Normal behavior: exit. 
 Only referenced by C<gd_setup_signals()>.
 
+=item gd_kill_groups()
+
+Return true if gd_kill should kill process groups ($pid) instead of just
+the one daemon ($pid).  Default is false.
+
 =item gd_kill($pid)
 
 Used by the C<stop> and C<restart> commands to get rid of

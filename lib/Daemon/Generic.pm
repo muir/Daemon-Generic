@@ -521,9 +521,14 @@ sub gd_uninstall
 	exit(0);
 }
 
+sub gd_kill_groups { 0 }
+	
+
 sub gd_kill
 {
 	my ($self, $pid) = @_;
+
+	$pid = -abs($pid) if $self->gd_kill_groups();
 
 	my $talkmore = 0;
 	my $killed = 0;
