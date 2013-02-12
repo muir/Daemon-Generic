@@ -124,6 +124,7 @@ callback methods.
 
 This is where you put your main program.
 
+It is okay to change userid/group as the first action of gd_run().
 
 =back
 
