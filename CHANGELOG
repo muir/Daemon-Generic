@@ -1,3 +1,7 @@
+Added gd_reopen_output() to address bug 83087.
+
+Fixed bug 80604: Typos in README
+
 = 2012/03/07	0.82
 
 s/tmpdir/tmpdie/

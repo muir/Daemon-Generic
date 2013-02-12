@@ -265,11 +265,23 @@ sub gd_redirect_output
 	open(STDERR, ">&STDOUT") or tmpdie("dup stdout > stderr: $!");
 }
 
+sub gd_reopen_output
+{
+	my $self = shift;
+	return if $self->{gd_foreground};
+	my $logname = $self->gd_logname;
+	my $p = $self->{gd_logpriority} ? "-p $self->{gd_logpriority}" : "";
+	open(STDERR, "|logger $p -t '$logname'") or tmpdie("open |logger $p -t $logname: $!");
+	open(STDOUT, ">&STDERR") or tmpdie("dup stderr > stdout: $!");
+	select(STDERR);
+	$| = 1;
+	select(STDOUT);
+	$| = 1;
+}
+
 sub gd_daemonize
 {
 	my $self = shift;
-	my $logname = $self->gd_logname;
-
 	open(TMPERR, ">&STDERR") or die "dup STDERR > TMPERR: $!";
 
 	print "Starting $self->{gd_progname} server\n";
@@ -281,13 +293,7 @@ sub gd_daemonize
 
 	POSIX::setsid();
 
-	my $p = $self->{gd_logpriority} ? "-p $self->{gd_logpriority}" : "";
-	open(STDERR, "|logger $p -t '$logname'") or tmpdie("open |logger $p -t $logname: $!");
-	open(STDOUT, ">&STDERR") or tmpdie("dup stderr > stdout: $!");
-	select(STDERR);
-	$| = 1;
-	select(STDOUT);
-	$| = 1;
+	$self->gd_reopen_output();
 	print "Sucessfully daemonized\n" 
 		or tmpdie("write to |logger: $!");
 

@@ -291,6 +291,12 @@ Normal behavior: C<fork()>, C<fork()>, detach from tty.
 
 =item gd_redirect_output()
 
+This is a mis-named method.  Sorry.  This directs C<STDOUT>/C<STDERR>/C<STDIN>
+to C</dev/null> as part of daemonizing.  Used by C<gd_daemonize()>.
+
+=item gd_reopen_output()
+
+After daemonizing, output file descriptors are be re-established.
 Normal behavior: redirect C<STDOUT> and C<STDERR> to 
 C<logger -t $progname[$$]>.  Used by C<gd_daemonize()>.
 

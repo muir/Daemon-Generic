@@ -19,7 +19,7 @@ DESCRIPTION
     overridden as needed.
 
 EXAMPLE USAGE OUTPUT
-    Unless overriden, the usage output for your program will look something
+    Unless overridden, the usage output for your program will look something
     like this:
 
      Usage: $progname [ -c file ] [ -f ] { start | stop | reload | restart | help | version | check }
@@ -51,7 +51,7 @@ CONSTRUCTION
 
     pidbase        (/var/run/$progname) We include the configuration file
                    name as part of the pid file in case there are multiple
-                   instances of this deamon. The pidbase is is the part of
+                   instances of this daemon. The pidbase is is the part of
                    the PID file that does not include the configuration file
                    name.
 
@@ -199,8 +199,15 @@ MAY-OVERRIDE CALLBACK METHODS
     gd_daemonize() Normal behavior: "fork()", "fork()", detach from tty.
 
     gd_redirect_output()
-                   Normal behavior: redirect "STDOUT" and "STDERR" to
-                   "logger -t $progname[$$]". Used by "gd_daemonize()".
+                   This is a mis-named method. Sorry. This directs
+                   "STDOUT"/"STDERR"/"STDIN" to "/dev/null" as part of
+                   daemonizing. Used by "gd_daemonize()".
+
+    gd_reopen_output()
+                   After daemonizing, output file descriptors are be
+                   re-established. Normal behavior: redirect "STDOUT" and
+                   "STDERR" to "logger -t $progname[$$]". Used by
+                   "gd_daemonize()".
 
     gd_logname()   Normal behavior: $progname[$$]. Used by
                    "gd_redirect_output()".
