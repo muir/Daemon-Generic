@@ -7,11 +7,12 @@ require Exporter;
 require POSIX;
 use Getopt::Long;
 use File::Slurp;
+use File::Flock::Forking;
 use File::Flock;
 our @ISA = qw(Exporter);
 our @EXPORT = qw(newdaemon);
 
-our $VERSION = 0.82;
+our $VERSION = 0.83;
 
 our $force_quit_delay = 15;
 our $package = __PACKAGE__;
@@ -100,7 +101,7 @@ sub new
 		if ($locked = lock($pidfile, undef, 'nonblocking')) {
 			# old process is dead
 			if ($do eq 'status') {
-			    print "$0 dead\n";
+			    print "$self->{gd_progname} dead\n";
 			    exit 1;
 			}
 		} else {
@@ -124,16 +125,16 @@ sub new
 					}
 				} elsif ($do eq 'status') {
 					if (kill(0,$oldpid)) {
-						print "$0 running - pid $oldpid\n";
+						print "$self->{gd_progname} running - pid $oldpid\n";
 						$self->gd_check($pidfile, $oldpid);
 						exit 0;
 					} else {
-						print "$0 dead\n";
+						print "$self->{gd_progname} dead\n";
 						exit 1;
 					}
 				} elsif ($do eq 'check') {
 					if (kill(0,$oldpid)) {
-						print "$0 running - pid $oldpid\n";
+						print "$self->{gd_progname} running - pid $oldpid\n";
 						$self->gd_check($pidfile, $oldpid);
 						exit;
 					} 
@@ -151,7 +152,7 @@ sub new
 	}
 
 	if ($do eq 'reload' || $do eq 'stop' || $do eq 'check' || ($do eq 'restart' && ! $killed)) {
-		print "No $0 running\n";
+		print "No $self->{gd_progname} running\n";
 	}
 
 	if ($do eq 'stop') {
@@ -160,7 +161,7 @@ sub new
 	}
 
 	if ($do eq 'status') {
-		print "No $0 running\n";
+		print "No $self->{gd_progname} running\n";
 		exit 3;
 	}
 

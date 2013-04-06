@@ -1,4 +1,10 @@
 
+= 2013/04/05	0.83
+
+Now using File::Flock::Forking so that locks are held on Solaris.  Bug 83085.
+
+Now using $self->{gd_progname} in all messages instead of $0.  Bug 84439.
+
 Added gd_kill_groups().  Bug 83294.
 
 'status' now says "No $0 running" if the pid file is missing.  Bug 83295.

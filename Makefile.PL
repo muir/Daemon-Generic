@@ -8,7 +8,7 @@ WriteMakefile(
 	dist		=> { COMPRESS => 'gzip', SUFFIX => 'gz' },
 	PREREQ_PM	=> {
 		'Getopt::Long'		=> 0,
-		'File::Flock'		=> 0,
+		'File::Flock'		=> 2013.06,
 		'File::Slurp'		=> 0,
 		'Text::Wrap'		=> 0,
 		'Cwd'			=> 0,
