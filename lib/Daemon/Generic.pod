@@ -1,4 +1,3 @@
-
 =head1 NAME
 
  Daemon::Generic - framework to provide start/stop/reload for a daemon
@@ -67,7 +66,7 @@ file for this daemon.
 
 (/var/run/$progname) We include the configuration file name
 as part of the pid file in case there are multiple instances
-of this daemon.  The pidbase is is the part of the PID file
+of this daemon.  The pidbase is the part of the PID file
 that does not include the configuration file name.
 
 =item pidfile
@@ -151,7 +150,7 @@ Most uses of Daemon::Generic should define C<gd_preconfig>.
 
 =item gd_postconfig(%config)
 
-Postconfig() is called only when the daeamon is actually starting up.
+Postconfig() is called only when the daemon is actually starting up.
 (Or on reconfigs).  It is passed the return value from C<gd_preconfig>.
 
 =item gd_setup_signals()
@@ -478,4 +477,3 @@ as Perl itself.
 =head1 PACKAGERS
 
 Daemon::Generic is packaged for Fedora by Emmanuel Seyman <emmanuel.seyman@club-internet.fr>.
-
