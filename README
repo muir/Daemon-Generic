@@ -50,8 +50,8 @@ CONSTRUCTION
 
     pidbase        (/var/run/$progname) We include the configuration file
                    name as part of the pid file in case there are multiple
-                   instances of this daemon. The pidbase is is the part of
-                   the PID file that does not include the configuration file
+                   instances of this daemon. The pidbase is the part of the
+                   PID file that does not include the configuration file
                    name.
 
     pidfile        ("$pidbase.$configfile.pid") The location of the process
@@ -108,7 +108,7 @@ MAY-OVERRIDE CALLBACK METHODS
                    "gd_preconfig".
 
     gd_postconfig(%config)
-                   Postconfig() is called only when the daeamon is actually
+                   Postconfig() is called only when the daemon is actually
                    starting up. (Or on reconfigs). It is passed the return
                    value from "gd_preconfig".
 

@@ -6,5 +6,5 @@ lib/Daemon/Generic/AnyEvent.pm
 lib/Daemon/Generic/While1.pm
 Makefile.PL
 MANIFEST
-CHANGELOG
+Changes
 t/daemon.t

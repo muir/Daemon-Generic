@@ -9,7 +9,7 @@ require Exporter;
 
 our @ISA = qw(Daemon::Generic Exporter);
 our @EXPORT = @Daemon::Generic::EXPORT;
-our $VERSION = 0.3;
+our $VERSION = 0.84;
 
 sub newdaemon
 {
